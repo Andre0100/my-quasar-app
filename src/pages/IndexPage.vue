@@ -1,3 +1,4 @@
+<!-- pages/IndexPage.vue -->
 <template>
   <q-page class="q-pa-md">
     <!-- Hero Section -->
@@ -172,7 +173,7 @@ const filter = ref({
 const priceRange = ref([0, store.maxPrice || 500])
 const sortBy = ref('price-asc')
 const page = ref(1)
-const perPage = ref(12)
+const perPage = ref(12) // Cambiado a 12 productos por página
 const searchQuery = ref('')
 
 // Opciones
@@ -189,7 +190,7 @@ const sortOptions = [
   { label: 'Nombre A-Z', value: 'name-asc' },
 ]
 
-const perPageOptions = [12, 24, 36, 48]
+const perPageOptions = [12, 24, 36, 48] // 12 como valor por defecto
 
 const brandOptions = computed(() =>
   store.brands.map((brand) => ({

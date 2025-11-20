@@ -1,27 +1,37 @@
+<!-- components/ProductCard.vue -->
 <template>
   <q-card class="product-card cursor-pointer" @click="$router.push(`/product/${product.id}`)">
-    <q-img
-      :src="product.img"
-      ratio="4/3"
-      class="product-image"
-      placeholder-src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZWVlZWVlIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzk5OTk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuKKojwvdGV4dD48L3N2Zz4="
+    <!-- Carrusel de imágenes -->
+    <q-carousel
+      v-model="currentImage"
+      animated
+      infinite
+      arrows
+      navigation
+      height="200px"
+      class="product-carousel"
+      @mouseenter="pauseAutoPlay"
+      @mouseleave="resumeAutoPlay"
     >
-      <template v-slot:loading>
-        <q-spinner-gears color="primary" />
-      </template>
+      <q-carousel-slide
+        v-for="(img, index) in product.images || [product.img]"
+        :key="index"
+        :name="index"
+        :img-src="img"
+      />
+    </q-carousel>
 
-      <div class="absolute-top-right q-pa-sm">
-        <q-badge :color="product.condition === 'Nuevo' ? 'positive' : 'orange'" class="q-mb-xs">
-          {{ product.condition }}
-        </q-badge>
-      </div>
+    <div class="absolute-top-right q-pa-sm">
+      <q-badge :color="product.condition === 'Nuevo' ? 'positive' : 'orange'" class="q-mb-xs">
+        {{ product.condition }}
+      </q-badge>
+    </div>
 
-      <div class="absolute-bottom-left q-pa-sm">
-        <q-badge color="primary" transparent>
-          {{ product.brand }}
-        </q-badge>
-      </div>
-    </q-img>
+    <div class="absolute-bottom-left q-pa-sm">
+      <q-badge color="primary" transparent>
+        {{ product.brand }}
+      </q-badge>
+    </div>
 
     <q-card-section class="q-pb-none">
       <div class="text-subtitle2 text-weight-bold product-title two-lines">
@@ -76,14 +86,40 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useCartStore } from 'stores/cart'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router' // <- Agregar esta importación
+import { useRouter } from 'vue-router'
 
 const $q = useQuasar()
-const router = useRouter() // <- Agregar esta línea
+const router = useRouter()
 const props = defineProps({ product: Object })
 const cart = useCartStore()
+
+const currentImage = ref(0)
+let autoPlayInterval = null
+
+const pauseAutoPlay = () => {
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval)
+    autoPlayInterval = null
+  }
+}
+
+const resumeAutoPlay = () => {
+  if ((props.product.images || [props.product.img]).length > 1) {
+    startAutoPlay()
+  }
+}
+
+const startAutoPlay = () => {
+  const images = props.product.images || [props.product.img]
+  if (images.length > 1) {
+    autoPlayInterval = setInterval(() => {
+      currentImage.value = (currentImage.value + 1) % images.length
+    }, 3000)
+  }
+}
 
 function addToCart() {
   cart.add(props.product)
@@ -104,8 +140,17 @@ function addToCart() {
     ]
   })
 }
-</script>
 
+onMounted(() => {
+  startAutoPlay()
+})
+
+onUnmounted(() => {
+  if (autoPlayInterval) {
+    clearInterval(autoPlayInterval)
+  }
+})
+</script>
 
 <style scoped>
 .product-card {
@@ -121,7 +166,7 @@ function addToCart() {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.product-image {
+.product-carousel {
   border-radius: 8px 8px 0 0;
 }
 
@@ -138,5 +183,17 @@ function addToCart() {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Estilos para las flechas del carrusel */
+:deep(.q-carousel__arrow) {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+:deep(.q-carousel__navigation-inner) {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  padding: 4px 8px;
 }
 </style>

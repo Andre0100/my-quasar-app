@@ -1,3 +1,4 @@
+<!-- pages/ProductPage.vue -->
 <template>
   <q-page padding class="bg-grey-1">
     <div class="row q-col-gutter-xl">
@@ -149,6 +150,7 @@
                 <div>
                   <div class="text-subtitle1">{{ product.seller || '—' }}</div>
                   <div class="text-caption text-grey">{{ product.phone || '—' }}</div>
+                  <div class="text-caption text-grey">{{ product.location || '—' }}</div>
                 </div>
               </div>
             </q-tab-panel>
@@ -190,9 +192,8 @@ const activeTab = ref('description')
 const rating = ref(4.5)
 
 const images = computed(() => {
-  const mainImage = product.img || 'https://via.placeholder.com/600x400?text=Imagen+No+Disponible'
-  // En una app real, aquí vendrían más imágenes del producto
-  return [mainImage, mainImage, mainImage, mainImage]
+  // Usar el array de imágenes si existe, sino usar la imagen individual
+  return product.images || [product.img || 'https://via.placeholder.com/600x400?text=Imagen+No+Disponible']
 })
 
 const specifications = computed(() => [

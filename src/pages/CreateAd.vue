@@ -1,3 +1,4 @@
+<!-- pages/CreateAd.vue -->
 <template>
   <q-page padding class="bg-grey-1">
     <div class="row justify-center">
@@ -143,6 +144,7 @@
                 </div>
 
                 <div class="col-12 q-mt-md">
+                  <div class="text-subtitle2 q-mb-sm">Vista previa:</div>
                   <div class="row q-gutter-sm">
                     <div v-for="(preview, index) in previews" :key="index" class="col-3">
                       <q-img :src="preview" style="height: 100px" class="rounded-borders">
@@ -249,6 +251,7 @@ function onFilesRemoved() {
 function removeImage(index) {
   previews.value.splice(index, 1)
   uploadedFiles.value.splice(index, 1)
+  form.images.splice(index, 1)
 }
 
 async function onSubmit() {
@@ -282,7 +285,7 @@ async function onSubmit() {
       phone: form.phone,
       email: form.email,
       location: form.location,
-      img: form.images[0] || 'https://via.placeholder.com/600x400?text=Imagen+del+Producto',
+      images: form.images.length > 0 ? form.images : ['https://via.placeholder.com/600x400?text=Imagen+del+Producto'],
       createdAt: new Date().toISOString(),
     }
 
