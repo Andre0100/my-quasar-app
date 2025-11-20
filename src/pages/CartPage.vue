@@ -13,7 +13,7 @@
           <div class="col-auto">
             <q-btn
               color="primary"
-              icon="shopping_cart"
+              icon="arrow_back"
               label="Seguir Comprando"
               to="/"
             />
@@ -43,10 +43,10 @@
             <q-card class="q-pa-md">
               <div class="text-h6 q-mb-md">Productos Seleccionados</div>
 
-              <div v-for="item in cartItems" :key="item.cartId" class="cart-item q-mb-lg">
-                <div class="row items-center">
+              <div v-for="item in cartItems" :key="item.cartId" class="cart-item q-mb-md">
+                <div class="row items-center q-col-gutter-md">
                   <!-- Product Image -->
-                  <div class="col-3">
+                  <div class="col-12 col-sm-3">
                     <q-img
                       :src="item.img"
                       ratio="1"
@@ -56,18 +56,20 @@
                   </div>
 
                   <!-- Product Info -->
-                  <div class="col-5">
+                  <div class="col-12 col-sm-5">
                     <div class="text-subtitle1 text-weight-bold">{{ item.title }}</div>
                     <div class="text-caption text-grey q-mt-xs">
-                      {{ item.brand }} • {{ item.ram }} • {{ item.rom }}
+                      {{ item.brand }} • {{ item.ram }} RAM • {{ item.rom }} Almacenamiento
                     </div>
-                    <div class="text-caption text-grey">
-                      {{ item.condition }}
+                    <div class="text-caption">
+                      <q-badge :color="item.condition === 'Nuevo' ? 'positive' : 'orange'">
+                        {{ item.condition }}
+                      </q-badge>
                     </div>
                   </div>
 
                   <!-- Quantity Controls -->
-                  <div class="col-2">
+                  <div class="col-12 col-sm-2">
                     <div class="text-caption text-grey q-mb-xs">Cantidad</div>
                     <div class="row items-center no-wrap">
                       <q-btn
@@ -77,7 +79,7 @@
                         icon="remove"
                         size="sm"
                         :disable="item.quantity <= 1"
-                        @click="updateQuantity(item, item.quantity - 1)"
+                        @click="updateQuantity(item.cartId, item.quantity - 1)"
                       />
                       <div class="q-mx-sm text-subtitle1">{{ item.quantity }}</div>
                       <q-btn
@@ -86,18 +88,18 @@
                         color="primary"
                         icon="add"
                         size="sm"
-                        @click="updateQuantity(item, item.quantity + 1)"
+                        @click="updateQuantity(item.cartId, item.quantity + 1)"
                       />
                     </div>
                   </div>
 
                   <!-- Price & Remove -->
-                  <div class="col-2 text-right">
+                  <div class="col-12 col-sm-2 text-right">
                     <div class="text-h6 text-primary">
-                      ${{ (item.price * item.quantity).toFixed(2) }}
+                      ${{ (parseFloat(item.price) * item.quantity).toFixed(2) }}
                     </div>
                     <div class="text-caption text-grey">
-                      ${{ item.price.toFixed(2) }} c/u
+                      ${{ parseFloat(item.price).toFixed(2) }} c/u
                     </div>
                     <q-btn
                       flat
@@ -106,7 +108,7 @@
                       icon="delete"
                       size="sm"
                       class="q-mt-xs"
-                      @click="removeFromCart(item.cartId)"
+                      @click="removeFromCart(item)"
                     >
                       <q-tooltip>Eliminar producto</q-tooltip>
                     </q-btn>
@@ -139,7 +141,7 @@
                 </div>
 
                 <div class="row justify-between items-center q-mb-sm">
-                  <div class="text-body1">Impuestos</div>
+                  <div class="text-body1">Impuestos (13%)</div>
                   <div class="text-body1">${{ taxes.toFixed(2) }}</div>
                 </div>
 
@@ -192,11 +194,26 @@
         </div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Dialog -->
+    <q-dialog v-model="showDeleteDialog" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="red" text-color="white" />
+          <span class="q-ml-sm">¿Estás seguro de que quieres eliminar "{{ itemToDelete?.title }}" del carrito?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancelar" color="primary" v-close-popup />
+          <q-btn flat label="Eliminar" color="red" @click="confirmDelete" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useCartStore } from 'stores/cart'
 import { useProductsStore } from 'stores/products'
 import { useQuasar } from 'quasar'
@@ -208,11 +225,15 @@ const router = useRouter()
 const cartStore = useCartStore()
 const productsStore = useProductsStore()
 
+// State for delete confirmation
+const showDeleteDialog = ref(false)
+const itemToDelete = ref(null)
+
 // Computed properties
 const cartItems = computed(() => cartStore.items)
 const subtotal = computed(() => cartStore.total)
 const shipping = computed(() => subtotal.value > 0 ? cartStore.shipping : 0)
-const taxes = computed(() => subtotal.value * 0.13) // 13% de impuestos
+const taxes = computed(() => subtotal.value * 0.13)
 const total = computed(() => subtotal.value + shipping.value + taxes.value)
 
 // Recommended products (excluir productos ya en el carrito)
@@ -224,55 +245,75 @@ const recommendedProducts = computed(() => {
 })
 
 // Methods
-function updateQuantity(item, newQuantity) {
-  if (newQuantity < 1) return
-  cartStore.updateQuantity(item.cartId, newQuantity)
+function updateQuantity(cartId, newQuantity) {
+  console.log('🔄 Actualizando cantidad:', cartId, newQuantity)
+  cartStore.updateQuantity(cartId, newQuantity)
 }
 
-function removeFromCart(cartId) {
-  $q.dialog({
-    title: 'Eliminar producto',
-    message: '¿Estás seguro de que quieres eliminar este producto del carrito?',
-    cancel: true,
-    persistent: true
-  }).onOk(() => {
-    cartStore.remove(cartId)
-    $q.notify({
-      type: 'positive',
-      message: 'Producto eliminado del carrito',
-      position: 'top-right'
-    })
-  })
+function removeFromCart(item) {
+  console.log('🗑️ Intentando eliminar producto:', item)
+  itemToDelete.value = item
+  showDeleteDialog.value = true
+}
+
+function confirmDelete() {
+  if (itemToDelete.value) {
+    const success = cartStore.remove(itemToDelete.value.cartId)
+    if (success) {
+      // Usando Notify directamente si está disponible, sino console.log
+      if ($q && $q.notify) {
+        $q.notify({
+          type: 'positive',
+          message: 'Producto eliminado del carrito',
+          position: 'top-right',
+          timeout: 2000
+        })
+      } else {
+        console.log('✅ Producto eliminado del carrito')
+      }
+    } else {
+      if ($q && $q.notify) {
+        $q.notify({
+          type: 'negative',
+          message: 'Error al eliminar el producto',
+          position: 'top-right',
+          timeout: 2000
+        })
+      } else {
+        console.error('❌ Error al eliminar el producto')
+      }
+    }
+    itemToDelete.value = null
+  }
+  showDeleteDialog.value = false
 }
 
 function proceedToCheckout() {
-  $q.notify({
-    message: 'Procediendo al proceso de pago...',
-    color: 'primary',
-    icon: 'credit_card',
-    position: 'top'
-  })
+  // Usando Notify directamente si está disponible
+  if ($q && $q.notify) {
+    $q.notify({
+      message: 'Procediendo al proceso de pago...',
+      color: 'primary',
+      icon: 'credit_card',
+      position: 'top'
+    })
+  }
 
-  // Aquí podrías redirigir a una página de checkout real
-  // Por ahora simulamos el proceso
+  // Simular proceso de pago
   setTimeout(() => {
-    $q.dialog({
-      title: '¡Compra Exitosa!',
-      message: 'Tu pedido ha sido procesado correctamente. Recibirás un correo de confirmación.',
-      ok: {
-        label: 'Continuar',
-        color: 'positive'
-      }
-    }).onOk(() => {
+    // Usar el diálogo nativo del navegador como fallback
+    if (window.confirm('¡Compra Exitosa! Tu pedido ha sido procesado correctamente. ¿Deseas continuar?')) {
       cartStore.clear()
       router.push('/')
-    })
+    }
   }, 2000)
 }
 
 // Lifecycle
 onMounted(() => {
+  console.log('🛒 Inicializando página del carrito...')
   cartStore.loadCart()
+  console.log('📦 Productos en carrito:', cartStore.items)
 })
 </script>
 
@@ -284,16 +325,21 @@ onMounted(() => {
 
 .cart-item {
   transition: background-color 0.3s ease;
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .cart-item:hover {
   background-color: #f8f9fa;
-  border-radius: 8px;
 }
 
 @media (max-width: 768px) {
   .sticky-summary {
     position: static;
+  }
+
+  .cart-item {
+    padding: 16px;
   }
 }
 </style>

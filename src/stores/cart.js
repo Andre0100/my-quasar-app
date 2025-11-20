@@ -8,9 +8,9 @@ export const useCartStore = defineStore('cart', {
 
   getters: {
     count: (state) => state.items.reduce((total, item) => total + item.quantity, 0),
-    total: (state) => state.items.reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0),
+    total: (state) => state.items.reduce((acc, item) => acc + (parseFloat(item.price) || 0) * item.quantity, 0),
     totalWithShipping: (state) => {
-      const subtotal = state.items.reduce((acc, item) => acc + (item.price || 0) * item.quantity, 0)
+      const subtotal = state.items.reduce((acc, item) => acc + (parseFloat(item.price) || 0) * item.quantity, 0)
       return subtotal + (subtotal > 0 ? state.shipping : 0)
     },
     itemCount: (state) => state.items.length,
@@ -29,7 +29,7 @@ export const useCartStore = defineStore('cart', {
         // Si no existe, agregarlo
         this.items.push({
           ...product,
-          cartId: Date.now() + Math.random(), // Esto genera el cartId único
+          cartId: Date.now().toString() + Math.random().toString(36).substr(2, 9),
           addedAt: new Date().toISOString(),
           quantity: 1
         })
@@ -40,15 +40,16 @@ export const useCartStore = defineStore('cart', {
 
     remove(cartId) {
       console.log('🔄 Intentando eliminar producto con cartId:', cartId)
-      console.log('📦 Productos antes de eliminar:', this.items)
 
-      const index = this.items.findIndex(item => item.cartId === cartId)
-      console.log('🔍 Índice encontrado:', index)
+      const index = this.items.findIndex(item => {
+        console.log('Comparando:', item.cartId, 'con', cartId, 'resultado:', item.cartId === cartId)
+        return item.cartId === cartId
+      })
 
       if (index > -1) {
         this.items.splice(index, 1)
         this.persistCart()
-        console.log('✅ Producto eliminado. Productos después:', this.items)
+        console.log('✅ Producto eliminado exitosamente')
         return true
       }
 
@@ -58,9 +59,13 @@ export const useCartStore = defineStore('cart', {
 
     updateQuantity(cartId, quantity) {
       const item = this.items.find(item => item.cartId === cartId)
-      if (item && quantity > 0) {
-        item.quantity = quantity
-        this.persistCart()
+      if (item) {
+        if (quantity <= 0) {
+          this.remove(cartId)
+        } else {
+          item.quantity = quantity
+          this.persistCart()
+        }
       }
     },
 
@@ -79,7 +84,13 @@ export const useCartStore = defineStore('cart', {
       if (typeof window !== 'undefined') {
         const saved = localStorage.getItem('cellphone-cart')
         if (saved) {
-          this.items = JSON.parse(saved)
+          try {
+            this.items = JSON.parse(saved)
+            console.log('🛒 Carrito cargado:', this.items)
+          } catch (error) {
+            console.error('❌ Error cargando carrito:', error)
+            this.items = []
+          }
         }
       }
     }

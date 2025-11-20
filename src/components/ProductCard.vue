@@ -92,7 +92,7 @@ function addToCart() {
     color: 'positive',
     icon: 'shopping_cart',
     position: 'top-right',
-    timeout: 1500,
+    timeout: 2000,
     actions: [
       {
         label: 'Ver Carrito',
