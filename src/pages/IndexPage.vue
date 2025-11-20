@@ -147,7 +147,11 @@
             boundary-links
             color="primary"
             active-color="secondary"
+            size="sm"
           />
+          <div class="text-caption text-grey q-ml-md self-center">
+            Página {{ page }} de {{ pageCount }}
+          </div>
         </div>
       </div>
     </div>
@@ -173,7 +177,7 @@ const filter = ref({
 const priceRange = ref([0, store.maxPrice || 500])
 const sortBy = ref('price-asc')
 const page = ref(1)
-const perPage = ref(12) // Cambiado a 12 productos por página
+const perPage = ref(6)
 const searchQuery = ref('')
 
 // Opciones
@@ -190,7 +194,7 @@ const sortOptions = [
   { label: 'Nombre A-Z', value: 'name-asc' },
 ]
 
-const perPageOptions = [12, 24, 36, 48] // 12 como valor por defecto
+const perPageOptions = [6, 12, 24, 36]
 
 const brandOptions = computed(() =>
   store.brands.map((brand) => ({

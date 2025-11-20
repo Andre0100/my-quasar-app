@@ -15,8 +15,8 @@ const sampleData = [
     color: 'Negro',
     images: [
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop'
     ],
     description: 'Samsung J6 con 64GB de almacenamiento, 2GB RAM. Color negro. Incluye todos los accesorios originales.',
     seller: 'TecnoStore',
@@ -39,7 +39,8 @@ const sampleData = [
     phone: '7374-2312',
     images: [
       'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
     ],
     description: `Teléfono en muy buenas condiciones, tiene dos cámaras, la caja está abierta pero con muy poco uso. Viene con su caja original y todos sus accesorios. Funciona solo con chip Tigo.`,
     location: 'Santa Tecla',
@@ -58,7 +59,8 @@ const sampleData = [
     color: 'Azul',
     images: [
       'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
     ],
     description: 'Huawei P30 Lite nuevo en caja sellada. 128GB almacenamiento, 4GB RAM. Cámara triple de 48MP.',
     seller: 'MobileShop',
@@ -78,8 +80,9 @@ const sampleData = [
     condition: 'Nuevo',
     color: 'Blanco',
     images: [
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop', // Reemplazada
+      'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop', // Reemplazada
+      'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop'  // Reemplazada
     ],
     description: 'Xiaomi Redmi Note 10 con pantalla AMOLED de 6.43". Batería de 5000mAh. Cámara cuádruple.',
     seller: 'TecnoMundo',
@@ -100,7 +103,8 @@ const sampleData = [
     color: 'Azul',
     images: [
       'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop'
     ],
     description: 'Nokia 5.3 en excelente estado. Pantalla de 6.55". Cuádruple cámara. Batería de 2 días.',
     seller: 'Carlos Rodriguez',
@@ -121,7 +125,8 @@ const sampleData = [
     color: 'Violeta',
     images: [
       'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop'
     ],
     description: 'Samsung Galaxy A32 nuevo. 128GB almacenamiento, 6GB RAM. Pantalla Super AMOLED.',
     seller: 'ElectroCenter',
@@ -143,7 +148,8 @@ const sampleData = [
     color: 'Verde Medianoche',
     images: [
       'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
     ],
     description: 'iPhone 11 Pro en excelente estado. 256GB de almacenamiento. Cámara triple 12MP.',
     seller: 'AppleStore SV',
@@ -164,7 +170,8 @@ const sampleData = [
     color: 'Negro Fantasma',
     images: [
       'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop'
     ],
     description: 'Samsung Galaxy S21 Ultra nuevo. Pantalla Dynamic AMOLED 2X. Cámara de 108MP.',
     seller: 'TecnoElite',
@@ -185,7 +192,8 @@ const sampleData = [
     color: 'Blanco Brillante',
     images: [
       'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
     ],
     description: 'Huawei Mate 40 Pro. Cámara Leica. Carga inalámbrica. Resistente al agua.',
     seller: 'Huawei Center',
@@ -205,8 +213,9 @@ const sampleData = [
     condition: 'Nuevo',
     color: 'Azul Océano',
     images: [
-      'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop'
+      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop', // Reemplazada
+      'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop', // Reemplazada
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'  // Reemplazada
     ],
     description: 'Xiaomi Mi 11 Lite. Ultra delgado y ligero. Pantalla AMOLED de 90Hz.',
     seller: 'Mi Store',
@@ -227,29 +236,9 @@ const sampleData = [
     color: 'Azul Polar',
     images: [
       'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop'
-    ],
-    description: 'Nokia 8.3 5G. Compatible con redes 5G. Cámara penta con Zeiss optics.',
-    seller: 'Nokia Official',
-    phone: '7123-8899',
-    location: 'Mejicanos',
-    createdAt: '2024-01-05T10:40:00Z'
-  },
-  {
-    id: 12,
-    title: 'iPhone SE 2022',
-    price: 380.0,
-    rom: '64GB',
-    ram: '3GB',
-    brand: 'iPhone',
-    system: 'iOS',
-    screen: '4.7',
-    condition: 'Nuevo',
-    color: 'Rojo',
-    images: [
-      'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
-      'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400&h=300&fit=crop'
-    ],
+      'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop',
+      'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop'],
+
     description: 'iPhone SE 2022. Chip A15 Bionic. Diseño compacto. Touch ID.',
     seller: 'Apple Premium',
     phone: '2278-5566',
